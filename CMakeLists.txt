@@ -52,7 +52,8 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/src/*.cpp")
 
 add_executable(${PROJECT_NAME} ${SOURCES}
         src/ParticleSystem.cpp
-        src/AssetManager.cpp)
+        src/AssetManager.cpp
+        src/GameObject.cpp)
 
 target_include_directories(${PROJECT_NAME} PRIVATE
         ${PROJECT_SOURCE_DIR}/extern/stb

@@ -13,35 +13,36 @@ Application::Application() {
 
 
 bool Application::Init() {
-    Context.assetManager->Init();
+
+    Context.Init();
 
     try{
         bgAstTex = Context.assetManager->GetAssetHandle("BGAst0");
 
         InitRendering();
-
-        Context.gameStateManager->Init();
-
         InitBGParticles();
+
     } catch (...){
         std::cout << "Failed to init app\n";
     }
 
 
+    Context.sceneManager->Start();
 
     return true;
 }
 
 
 void Application::Loop(double dt) {
-    m_totalTime += dt;
-    m_fixedTickTime += dt;
+    Context.time->HandleTime(dt);
+
     // Update (non-static) background particles
     m_bgStarParticlesWhite.Update(dt);
     m_bgStarParticlesBlue.Update(dt);
     m_bgStarParticlesGreen.Update(dt);
 
     m_bgAsteroids.Update(dt);
+
 
     // Spawn/Emit background shooting stars
     m_bgShootingStarTimer += dt;
@@ -51,20 +52,16 @@ void Application::Loop(double dt) {
     }
 
     m_bgShootingStars.Update(dt);
-    Context.gameStateManager->Update(dt);
+    Context.sceneManager->Update();
 
-    Context.gameStateManager->OnRender();
 
-    if (m_fixedTickTime >= 1/60){
-        Context.gameStateManager->FixedUpdate();
-
-        Context.gameStateManager->OnPhysics();
-        m_fixedTickTime = 0;
+    if (Context.time->fixedUpdate){
+        Context.time->HandleFixedTick();
+        Context.sceneManager->FixedUpdate();
 
     }
 
-    Context.gameStateManager->LateUpdate(dt);
-
+    Context.sceneManager->LateUpdate();
 
 }
 

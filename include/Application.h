@@ -63,9 +63,6 @@ private:
     ParticleSystem m_bgAsteroids = ParticleSystem(true, false);
     ParticleSystem m_bgShootingStars = ParticleSystem(false, false);
 
-    double m_totalTime;
-    double m_lastFrameTime;
-    double m_fixedTickTime;
 
     double m_bgShootingStarTimer = 0;
 
