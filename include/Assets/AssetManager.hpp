@@ -10,6 +10,7 @@
 
 #include <FileIO/AudioClip.h>
 #include <Rendering/Mesh.h>
+#include "Rendering/Material.hpp"
 
 
 struct ApplicationContext;
@@ -31,16 +32,19 @@ private:
     std::vector<Asset<GLuint>> m_textures{};
     std::vector<Asset<AudioClip>> m_audioClips{};
     std::vector<Asset<Mesh>> m_meshes{};
+    std::vector<Asset<Material>> m_materials{};
 
     std::unordered_map<std::string, AssetHandle> m_nameLookup;
 
     bool m_loadedTextures{};
     bool m_loadedAudioClips{};
     bool m_loadedModels{};
+    bool m_loadedMaterials{};
 
     void LoadTextures();
     void LoadAudioClips();
     void LoadModels();
+    void LoadMaterials();
     void BuildLookups();
 
 public:
@@ -56,11 +60,11 @@ public:
     inline GLuint& GetTexture(AssetHandle& h){ return GetAsset(h, m_textures); }
     inline AudioClip& GetAudioClip(AssetHandle& h) { return GetAsset(h, m_audioClips); }
     inline Mesh& GetMesh(AssetHandle& h) { return GetAsset(h, m_meshes); }
+    inline Material& GetMaterial(AssetHandle& h) { return GetAsset(h, m_materials); }
 
     std::unique_ptr<AssetHandle> GetAssetHandleUPtr(const std::string& name){
         return std::make_unique<AssetHandle>(GetAssetHandle(name));
     }
-
 
 
     // Resources

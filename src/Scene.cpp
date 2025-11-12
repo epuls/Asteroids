@@ -1,5 +1,6 @@
 #include <Game/Scene.hpp>
 #include <ApplicationContext.hpp>
+#include <GameObject.h>
 
 
 void SceneManager::Init(){
@@ -8,15 +9,17 @@ void SceneManager::Init(){
 
 void SceneManager::Start() {
     for(auto& obj : currentScene->sceneObjects){
-        obj.Start();
+        obj->Start();
     }
+
+    LOG_DEBUG("Scene", "Called Start on Current Scene's Game Objects");
 }
 
 void SceneManager::Update() {
     currentScene->gameStateManager->Update(m_ctx.time->deltaTime);
     currentScene->gameStateManager->OnRender();//TODO: Build renderer class
     for(auto& obj : currentScene->sceneObjects){
-        obj.Update();
+        obj->Update();
     }
 }
 
@@ -24,33 +27,35 @@ void SceneManager::FixedUpdate() {
     currentScene->gameStateManager->FixedUpdate();
     currentScene->gameStateManager->OnPhysics();//TODO: Build physics/collision class
     for(auto& obj : currentScene->sceneObjects){
-        obj.FixedUpdate();
+        obj->FixedUpdate();
     }
 }
 
 void SceneManager::LateUpdate() {
     currentScene->gameStateManager->LateUpdate(m_ctx.time->deltaTime);
     for(auto& obj : currentScene->sceneObjects){
-        obj.LateUpdate();
+        obj->LateUpdate();
     }
 }
 
 void SceneManager::OnDestroy() {
     for(auto& obj : currentScene->sceneObjects){
-        obj.OnDestroy();
+        obj->OnDestroy();
     }
 }
 
 void SceneManager::LoadScene() {
+    LOG_DEBUG("Scene", "Setting up default scene");
     currentScene = std::make_shared<Scene>();
     currentScene->gameStateManager = std::make_unique<GameStateManager>(m_ctx);
     currentScene->gameStateManager->Init();
+    currentScene->sceneObjects.reserve(2);
 
-    SpawnGameObject();
-    SpawnGameObject();
+    auto playerObj = SpawnGameObject();
+    auto& mr = playerObj->AddComponent<MeshRenderer>();
 
-
-
+    mr.mesh = m_ctx.assetManager->GetAssetHandle("ShipMesh");
+    mr.material = m_ctx.assetManager->GetAssetHandle("ShipMaterial");
 }
 
 

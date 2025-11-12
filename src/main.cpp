@@ -16,6 +16,7 @@
 static SDL_Window*   g_window;
 static SDL_GLContext g_glctx;
 
+int Debug::LoggingLevel = Debug::LogLevel::DEBUG;
 static void fail(const char* m) { SDL_Log("%s: %s", m, SDL_GetError()); }
 
 const std::string ApplicationSettings::DIRECTORY = std::filesystem::current_path().string();
@@ -102,7 +103,7 @@ SDL_AppResult SDL_AppInit(void**, int, char**)
 
 
 
-
+    LOG_DEBUG("Main", "SDL application initialized");
     return SDL_APP_CONTINUE;
 }
 

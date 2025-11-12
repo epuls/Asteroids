@@ -5,6 +5,7 @@ struct AssetHandle{
         MODEL,
         TEXTURE,
         AUDIO,
+        MATERIAL,
         UNDF
     };
 

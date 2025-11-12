@@ -1,6 +1,7 @@
 #include <Assets/AssetManager.hpp>
 #include <ApplicationSettings.hpp>
 #include <FileIO/LoadObj.hpp>
+#include "Rendering/HardcodedShaders.hpp"
 
 void AssetManager::Init() {
     try{
@@ -19,6 +20,12 @@ void AssetManager::Init() {
         LoadModels();
     } catch (std::exception& e){
         std::cout << "FAILED TO LOAD MESHES: " << e.what() << std::endl;
+    }
+
+    try{
+        LoadMaterials();
+    } catch (std::exception& e){
+        std::cout << "FAILED TO LOAD MATERIALS: " << e.what() << std::endl;
     }
 
     try{
@@ -71,6 +78,15 @@ void AssetManager::LoadModels() {
     }
 }
 
+void AssetManager::LoadMaterials() {
+    if (m_loadedMaterials) return;
+    m_loadedMaterials = true;
+
+    auto shipMat = Asset<Material>("ShipMaterial", Material{});
+    shipMat.value.Shader = std::make_shared<PlayerShipShader>();
+    m_materials.emplace_back(std::move(shipMat));
+}
+
 template<typename T>
 void BuildLookup(std::unordered_map<std::string, AssetHandle>& lookupTable, std::vector<Asset<T>>& assetStore, AssetHandle::AssetType type){
     for (int i = 0; i < assetStore.size(); i++){
@@ -82,5 +98,8 @@ void AssetManager::BuildLookups() {
     BuildLookup(m_nameLookup, m_textures, AssetHandle::AssetType::TEXTURE);
     BuildLookup(m_nameLookup, m_audioClips, AssetHandle::AssetType::AUDIO);
     BuildLookup(m_nameLookup, m_meshes, AssetHandle::AssetType::MODEL);
+    BuildLookup(m_nameLookup, m_materials, AssetHandle::AssetType::MATERIAL);
 }
+
+
 

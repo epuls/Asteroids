@@ -1,19 +1,26 @@
 #pragma once
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
 
 #include <memory>
 
+
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+
+
+
 #include <Utilities/Log.hpp>
+
+#include <Rendering/Material.hpp>
+#include <Rendering/Mesh.h>
+
+#include <Assets/AssetHandle.h>
 
 // Forward declare
 class GameObject;
 
 class Component{
 public:
-    explicit Component(GameObject& go) : gameObject(go){}
-
-    GameObject& gameObject;
+    GameObject* gameObject;
 
     void BaseInit(){ Init(); }
     void BaseStart(){ Start(); }
@@ -35,22 +42,23 @@ private:
 
 class Transform : public Component{
 public:
-    explicit Transform(GameObject& go) : Component(go){}
     glm::vec3 position{};
     glm::vec3 localPosition{};
     glm::quat rotation{};
 
 private:
     std::shared_ptr<Transform> m_parent;
-    void Init() override{ DebugLog("Component", "Initialized Transform!"); }
-    void Start() override{ DebugLog("Component", "Called Start on Transform!"); }
-    void Update() override{DebugLog("Component", "Called Update on Transform!"); }
-    void FixedUpdate() override{DebugLog("Component", "Called FixedUpdate on Transform!"); }
-    void LateUpdate() override{DebugLog("Component", "Called LateUpdate on Transform!"); }
+    void Init() override{ }
+    void Start() override{ }
+    void Update() override{ }
+    void FixedUpdate() override{ }
+    void LateUpdate() override{ }
 };
 
-class MeshComponent : public Component{
-
+class MeshRenderer : public Component{
+public:
+    AssetHandle mesh{};
+    AssetHandle material{};
 };
 
 class ParticleSystemComponent : public Component{

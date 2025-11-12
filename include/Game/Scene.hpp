@@ -8,7 +8,7 @@ struct ApplicationContext;
 
 struct Scene{
     std::string name = "default_scene";
-    std::vector<GameObject> sceneObjects{};
+    std::vector<std::shared_ptr<GameObject>> sceneObjects{};
     std::unique_ptr<GameStateManager> gameStateManager;
 };
 
@@ -24,7 +24,15 @@ public:
     void LateUpdate();
     void OnDestroy();
 
-    void SpawnGameObject() { currentScene->sceneObjects.emplace_back(); }
+    // Need to switch to a handle slot/index system, references to objects in vector can dangle if vec resizes
+    std::shared_ptr<GameObject> SpawnGameObject(){
+        currentScene->sceneObjects.emplace_back(std::make_shared<GameObject>());
+        return currentScene->sceneObjects.back();
+    }
+
+    std::shared_ptr<GameObject>& GetObjectFromIndex(uint32_t idx){
+        return  currentScene->sceneObjects.at(idx);
+    }
 
     explicit SceneManager(ApplicationContext& ctx) : m_ctx(ctx) {}
     ~SceneManager() { OnDestroy(); }

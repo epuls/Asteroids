@@ -3,7 +3,9 @@
 #include <glad/glad.h>
 #include <Rendering/Vertex.h>
 
+
 #include <iostream>
+
 
 //stub for now
 struct Texture{};
@@ -17,6 +19,7 @@ public:
 
     // GPU handles (created lazily on first upload)
     GLuint vao{0}, vbo{0}, ebo{0};
+
 
     Mesh() = default;
     Mesh(std::vector<Vertex> v, std::vector<unsigned> i, std::vector<Texture> t)
