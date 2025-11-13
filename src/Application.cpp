@@ -17,7 +17,7 @@ bool Application::Init() {
     Context.Init();
 
     try{
-        bgAstTex = Context.assetManager->GetAssetHandle("BGAst0");
+        bgAstTex = Context.assetManager->GetAssetHandleSharedPtr("BGAst0");
 
         InitRendering();
         InitBGParticles();
@@ -62,6 +62,9 @@ void Application::Loop(double dt) {
     }
 
     Context.sceneManager->LateUpdate();
+
+    // Enable when fully migrated to game object system
+    // Context.renderer->Render();
 
 }
 
@@ -171,7 +174,7 @@ void Application::InitBGParticles() {
     m_bgAsteroids.particleShader = std::make_unique<TexturedQuadParticle>();
 
     //m_bgAsteroidTex = TextureFromFile(bgAstFileName, bgAstTexDir);
-    m_bgAsteroids.particleShader->texture0 = Context.assetManager->GetTexture(bgAstTex);
+    m_bgAsteroids.particleShader->texture0 = Context.assetManager->GetTexture(*bgAstTex);
     m_bgAsteroids.particleShader->followCam = false;
     m_bgAsteroids.particleShader->Create(); //ast.Use();
     m_bgAsteroids.particleShader->SetUniformLocations();

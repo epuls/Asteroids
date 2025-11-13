@@ -33,6 +33,7 @@ public:
         component.gameObject = this;
 
         m_allComponents.push_back(&component);
+        m_allComponents.back()->BaseInit();
         return component;
     }
 

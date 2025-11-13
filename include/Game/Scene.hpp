@@ -27,6 +27,7 @@ public:
     // Need to switch to a handle slot/index system, references to objects in vector can dangle if vec resizes
     std::shared_ptr<GameObject> SpawnGameObject(){
         currentScene->sceneObjects.emplace_back(std::make_shared<GameObject>());
+        currentScene->sceneObjects.back()->Init();
         return currentScene->sceneObjects.back();
     }
 

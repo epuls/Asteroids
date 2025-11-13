@@ -2,27 +2,28 @@
 #include <FileIO/LoadObj.hpp>
 #include <random>
 #include <ApplicationSettings.hpp>
+#include <ApplicationContext.hpp>
 
 
 void Asteroids::Init(){
-    astTex = m_ctx.assetManager->GetAssetHandle("AstTex");
-    astModel = m_ctx.assetManager->GetAssetHandle("Asteroid");
+    astTex = m_ctx.assetManager->GetAssetHandleSharedPtr("AstTex");
+    astModel = m_ctx.assetManager->GetAssetHandleSharedPtr("Asteroid");
 
-    destroyMediumTex = m_ctx.assetManager->GetAssetHandle("DestroyMedium");
-    destroyCrescentTex = m_ctx.assetManager->GetAssetHandle("DestroyCrescent");
+    destroyMediumTex = m_ctx.assetManager->GetAssetHandleSharedPtr("DestroyMedium");
+    destroyCrescentTex = m_ctx.assetManager->GetAssetHandleSharedPtr("DestroyCrescent");
 
-    shatter = m_ctx.assetManager->GetAssetHandle("Shatter0");
-    impactBeat = m_ctx.assetManager->GetAssetHandle("ImpactBeat");
-    impactShort = m_ctx.assetManager->GetAssetHandle("ImpactShort");
-    impactThud = m_ctx.assetManager->GetAssetHandle("ImpactThud");
-    crunch = m_ctx.assetManager->GetAssetHandle("Crunch");
+    shatter = m_ctx.assetManager->GetAssetHandleSharedPtr("Shatter0");
+    impactBeat = m_ctx.assetManager->GetAssetHandleSharedPtr("ImpactBeat");
+    impactShort = m_ctx.assetManager->GetAssetHandleSharedPtr("ImpactShort");
+    impactThud = m_ctx.assetManager->GetAssetHandleSharedPtr("ImpactThud");
+    crunch = m_ctx.assetManager->GetAssetHandleSharedPtr("Crunch");
 
-    astShader.texture0 = m_ctx.assetManager->GetTexture(astTex);
+    astShader.texture0 = m_ctx.assetManager->GetTexture(*astTex);
     astShader.Create();
     astShader.Use();
     astShader.SetUniformLocations();
 
-    m_ctx.assetManager->GetMesh(astModel).upload();
+    m_ctx.assetManager->GetMesh(*astModel).upload();
     SpawnAsteroid();
 
     onDieParticles.particleShader = std::make_unique<DefaultRoundParticle>();
@@ -59,7 +60,7 @@ void Asteroids::Init(){
     // -----------
 
     onDieMediumParticles.particleShader = std::make_unique<TexturedQuadParticle>();
-    onDieMediumParticles.particleShader->texture0 = m_ctx.assetManager->GetTexture(destroyMediumTex);
+    onDieMediumParticles.particleShader->texture0 = m_ctx.assetManager->GetTexture(*destroyMediumTex);
     onDieMediumParticles.particleShader->Create();
     onDieMediumParticles.particleShader->SetUniformLocations();
     onDieMediumParticles.GetParticleData().shaderProgram = onDieMediumParticles.particleShader->GetProgram();
@@ -92,7 +93,7 @@ void Asteroids::Init(){
 
     onDieCrescentParticles.particleShader = std::make_unique<TexturedQuadParticle>();
     glUseProgram(onDieCrescentParticles.particleShader->GetProgram());
-    onDieCrescentParticles.particleShader->texture0 = m_ctx.assetManager->GetTexture(destroyCrescentTex);
+    onDieCrescentParticles.particleShader->texture0 = m_ctx.assetManager->GetTexture(*destroyCrescentTex);
     onDieCrescentParticles.particleShader->Create();
     onDieCrescentParticles.particleShader->SetUniformLocations();
     onDieCrescentParticles.GetParticleData().shaderProgram = onDieCrescentParticles.particleShader->GetProgram();
@@ -147,7 +148,7 @@ void Asteroids::RenderLoop(float dt) {
         astShader.SetRotationX(a.rotation);
         astShader.SetScale(a.radius);
         astShader.SetCamPos();
-        m_ctx.assetManager->GetMesh(astModel).draw();
+        m_ctx.assetManager->GetMesh(*astModel).draw();
 
         const float dim = 2;
         DrawAsteroidOffset(a, +dim, 0);
@@ -199,7 +200,7 @@ void Asteroids::SpawnAsteroid() {
 void Asteroids::DrawAsteroidOffset(AsteroidData a, float x, float y) {
     astShader.SetTranslation(a.translationX + x, a.translationY + y);
     astShader.SetRotation(a.rotation);
-    m_ctx.assetManager->GetMesh(astModel).draw();
+    m_ctx.assetManager->GetMesh(*astModel).draw();
 }
 
 void Asteroids::MoveAsteroids(float dt) {
@@ -237,13 +238,13 @@ void Asteroids::Damage(Asteroids::AsteroidData &a) {
         onDieCrescentParticles.EmitAt(a.translationX, a.translationY, a.velocityX * 0.005, a.velocityY * 0.005);
         a.alive = false;
         a.respawnTimeRemaining = asteroidSettings.respawnTimer;
-        m_ctx.assetManager->GetAudioClip(shatter).PlayWithJitter(0.9, 0.3, 0.2);
-        m_ctx.assetManager->GetAudioClip(impactBeat).PlayWithJitter(0.9, 0.1, 0.01);
-        m_ctx.assetManager->GetAudioClip(impactShort).PlayWithJitter(0.9, 0.3, 0.1);
+        m_ctx.assetManager->GetAudioClip(*shatter).PlayWithJitter(0.9, 0.3, 0.2);
+        m_ctx.assetManager->GetAudioClip(*impactBeat).PlayWithJitter(0.9, 0.1, 0.01);
+        m_ctx.assetManager->GetAudioClip(*impactShort).PlayWithJitter(0.9, 0.3, 0.1);
 
     } else {
-        m_ctx.assetManager->GetAudioClip(impactThud).PlayWithJitter(1.0, 0.2, 0.1);
-        m_ctx.assetManager->GetAudioClip(crunch).PlayWithJitter(1.0, 0.2, 0.05);
+        m_ctx.assetManager->GetAudioClip(*impactThud).PlayWithJitter(1.0, 0.2, 0.1);
+        m_ctx.assetManager->GetAudioClip(*crunch).PlayWithJitter(1.0, 0.2, 0.05);
     }
 }
 

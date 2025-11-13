@@ -40,7 +40,7 @@ public:
     static void UnbindParticleFBO();
 
     // Assets
-    AssetHandle bgAstTex;
+    std::shared_ptr<AssetHandle> bgAstTex;
 
     // Exposed for calling in SDL callback funcs
     bool Init();

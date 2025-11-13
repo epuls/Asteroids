@@ -6,8 +6,9 @@
 #include <vector>
 
 #include <Assets/AssetHandle.h>
-#include "ApplicationContext.hpp"
 
+// Forward decl
+struct ApplicationContext;
 
 class Asteroids{
 public:
@@ -19,16 +20,16 @@ public:
     ParticleSystem onDieCrescentParticles = ParticleSystem(false,false, 1000);
 
     // Resources
-    AssetHandle astModel;
-    AssetHandle astTex;
-    AssetHandle destroyMediumTex;
-    AssetHandle destroyCrescentTex;
+    std::shared_ptr<AssetHandle> astModel;
+    std::shared_ptr<AssetHandle> astTex;
+    std::shared_ptr<AssetHandle> destroyMediumTex;
+    std::shared_ptr<AssetHandle> destroyCrescentTex;
 
-    AssetHandle shatter;
-    AssetHandle impactBeat;
-    AssetHandle impactShort;
-    AssetHandle impactThud;
-    AssetHandle crunch;
+    std::shared_ptr<AssetHandle> shatter;
+    std::shared_ptr<AssetHandle> impactBeat;
+    std::shared_ptr<AssetHandle> impactShort;
+    std::shared_ptr<AssetHandle> impactThud;
+    std::shared_ptr<AssetHandle> crunch;
 
 
     void Init();

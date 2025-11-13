@@ -66,6 +66,10 @@ public:
         return std::make_unique<AssetHandle>(GetAssetHandle(name));
     }
 
+    [[nodiscard]]std::shared_ptr<AssetHandle> GetAssetHandleSharedPtr(const std::string& name){
+        return std::make_shared<AssetHandle>(GetAssetHandle(name));
+    }
+
 
     // Resources
     std::unordered_map<std::string, std::string> textureFilenames{

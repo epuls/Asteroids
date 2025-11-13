@@ -27,7 +27,7 @@ public:
     Asteroids asteroids{m_ctx.ctx};
     int score = 0;
 
-    AssetHandle lifeTexture;
+    std::shared_ptr<AssetHandle> lifeTexture;
 
 
 

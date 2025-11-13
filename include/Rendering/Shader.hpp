@@ -26,7 +26,7 @@ struct TransformData{
 
 class IShader{
 public:
-    IShader()= default;
+    IShader() = default;
     virtual ~IShader() = default;
 
     virtual void Use() {

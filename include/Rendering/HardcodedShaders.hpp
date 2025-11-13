@@ -187,7 +187,11 @@ public:
         rotationXUniformLocation = glGetUniformLocation(GetProgram(), "rotationX");
         scaleUniformLocation = glGetUniformLocation(GetProgram(), "scale");
 
+        SetRotation(0);
         SetRotationX(0);
+        SetTranslation(0,0);
+        SetScale(1);
+
     }
 
     void Cleanup() const override {

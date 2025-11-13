@@ -16,7 +16,7 @@ void State_Game::EnterState() {
     player.Init();
     asteroids.Init();
     AddInputEvents();
-    lifeTexture = m_ctx.ctx.assetManager->GetAssetHandle("Life");
+    lifeTexture = m_ctx.ctx.assetManager->GetAssetHandleSharedPtr("Life");
 
 
     scoreShader.Create(); scoreShader.SetUniformLocations();
@@ -98,7 +98,7 @@ void State_Game::OnRender() {
     scoreQuad.draw();
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    glBindTexture(GL_TEXTURE_2D, m_ctx.ctx.assetManager->GetTexture(lifeTexture));
+    glBindTexture(GL_TEXTURE_2D, m_ctx.ctx.assetManager->GetTexture(*lifeTexture));
     for (int i = 0; i < player.shipState.health; i++){
         livesShaders[i].Use();
         livesQuads[i].draw();

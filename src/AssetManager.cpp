@@ -75,30 +75,38 @@ void AssetManager::LoadModels() {
         std::vector<unsigned int> indices;
         LoadOBJ(path, verts, indices);
         m_meshes.emplace_back(Asset<Mesh>(p.first, Mesh(verts, indices, textures)));
+        m_meshes.back().value.upload();
     }
 }
 
 void AssetManager::LoadMaterials() {
     if (m_loadedMaterials) return;
     m_loadedMaterials = true;
+    m_materials.reserve(2);
 
     auto shipMat = Asset<Material>("ShipMaterial", Material{});
     shipMat.value.Shader = std::make_shared<PlayerShipShader>();
+    shipMat.value.Shader->Create();
     m_materials.emplace_back(std::move(shipMat));
+
+    auto astMat = Asset<Material>("AstMaterial", Material{});
+    astMat.value.Shader = std::make_shared<PlayerShipShader>();
+    astMat.value.Shader->Create();
+    m_materials.emplace_back(std::move(astMat));
 }
 
 template<typename T>
-void BuildLookup(std::unordered_map<std::string, AssetHandle>& lookupTable, std::vector<Asset<T>>& assetStore, AssetHandle::AssetType type){
+void BuildLookup(std::unordered_map<std::string, AssetHandle>& lookupTable, std::vector<Asset<T>>& assetStore, AssetHandle::AssetType type, AssetManager* owner){
     for (int i = 0; i < assetStore.size(); i++){
-        lookupTable.emplace(std::pair<std::string, AssetHandle>(assetStore.at(i).name, AssetHandle(type, i)));
+        lookupTable.emplace(std::pair<std::string, AssetHandle>(assetStore.at(i).name, AssetHandle(owner, type, i)));
     }
 }
 
 void AssetManager::BuildLookups() {
-    BuildLookup(m_nameLookup, m_textures, AssetHandle::AssetType::TEXTURE);
-    BuildLookup(m_nameLookup, m_audioClips, AssetHandle::AssetType::AUDIO);
-    BuildLookup(m_nameLookup, m_meshes, AssetHandle::AssetType::MODEL);
-    BuildLookup(m_nameLookup, m_materials, AssetHandle::AssetType::MATERIAL);
+    BuildLookup(m_nameLookup, m_textures, AssetHandle::AssetType::TEXTURE, this);
+    BuildLookup(m_nameLookup, m_audioClips, AssetHandle::AssetType::AUDIO, this);
+    BuildLookup(m_nameLookup, m_meshes, AssetHandle::AssetType::MODEL, this);
+    BuildLookup(m_nameLookup, m_materials, AssetHandle::AssetType::MATERIAL, this);
 }
 
 

@@ -2,6 +2,9 @@
 #include <ApplicationContext.hpp>
 #include <GameObject.h>
 
+#include <Rendering/Renderer.h>
+#include <Rendering/RenderTypes.hpp>
+
 
 void SceneManager::Init(){
     LoadScene();
@@ -54,8 +57,23 @@ void SceneManager::LoadScene() {
     auto playerObj = SpawnGameObject();
     auto& mr = playerObj->AddComponent<MeshRenderer>();
 
-    mr.mesh = m_ctx.assetManager->GetAssetHandle("ShipMesh");
-    mr.material = m_ctx.assetManager->GetAssetHandle("ShipMaterial");
+    mr.SetMesh(m_ctx.assetManager->GetAssetHandleSharedPtr("ShipMesh"));
+    mr.SetMaterial(m_ctx.assetManager->GetAssetHandleSharedPtr("ShipMaterial"));
+    mr.GetMaterial().SetTexture(m_ctx.assetManager->GetAssetHandleSharedPtr("ShipTex"));
+    playerObj->GetComponent<Transform>()->SetDirty(true);
+
+
+
+
+    auto asteroidObj = SpawnGameObject();
+    auto& amr = asteroidObj->AddComponent<MeshRenderer>();
+
+    amr.SetMesh(m_ctx.assetManager->GetAssetHandleSharedPtr("Asteroid"));
+    amr.SetMaterial(m_ctx.assetManager->GetAssetHandleSharedPtr("AstMaterial"));
+    amr.GetMaterial().SetTexture(m_ctx.assetManager->GetAssetHandleSharedPtr("AstTex"));
+    asteroidObj->GetComponent<Transform>()->SetDirty(true);
+
+
 }
 
 
