@@ -2,6 +2,7 @@
 
 #include <Rendering/RenderTypes.hpp>
 #include <Component.h>
+#include <Game/Components/Transform.hpp>
 
 
 void RenderObject::TrySyncTransforms() {

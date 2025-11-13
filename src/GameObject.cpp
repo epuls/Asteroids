@@ -1,4 +1,5 @@
 #include <GameObject.h>
+#include <Game/Components/Transform.hpp>
 
 
 void GameObject::Init() {

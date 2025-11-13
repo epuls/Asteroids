@@ -2,6 +2,9 @@
 #include <ApplicationContext.hpp>
 #include <GameObject.h>
 
+#include <Game/Components/Transform.hpp>
+#include <Game/Components/MeshRenderer.hpp>
+
 #include <Rendering/Renderer.h>
 #include <Rendering/RenderTypes.hpp>
 
@@ -72,8 +75,6 @@ void SceneManager::LoadScene() {
     amr.SetMaterial(m_ctx.assetManager->GetAssetHandleSharedPtr("AstMaterial"));
     amr.GetMaterial().SetTexture(m_ctx.assetManager->GetAssetHandleSharedPtr("AstTex"));
     asteroidObj->GetComponent<Transform>()->SetDirty(true);
-
-
 }
 
 
